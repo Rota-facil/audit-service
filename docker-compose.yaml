@@ -1,0 +1,18 @@
+services:
+  audit-database:
+    image: postgres:16
+    container_name: audit-database
+
+    environment:
+      POSTGRES_DB: ${DATASOURCE_NAME}
+      POSTGRES_USER: ${DATASOURCE_USERNAME}
+      POSTGRES_PASSWORD: ${DATASOURCE_PASSWORD}
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - audit-db-data:/var/lib/postgresql/data
+
+volumes:
+  audit-db-data:
