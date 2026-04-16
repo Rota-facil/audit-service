@@ -19,6 +19,6 @@ public class RabbitAuthEventConsumer {
             "${rabbitmq.audit.prefecture.deleted.queue}"
     })
     public void handlerFileEvent(AuditEventReceive auditEventReceive) {
-
+        System.out.println(auditEventReceive);
     }
 }

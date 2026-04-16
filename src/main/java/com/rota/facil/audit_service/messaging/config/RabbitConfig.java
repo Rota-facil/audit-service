@@ -18,7 +18,7 @@ public class RabbitConfig {
     @Value("${rabbitmq.auth.exchange}")
     private String authExchange;
 
-    @Value("${rabbitmq.audit.user.creted.queue}")
+    @Value("${rabbitmq.audit.user.created.queue}")
     private String userCreatedQueue;
 
     @Value("${rabbitmq.audit.user.updated.queue}")
