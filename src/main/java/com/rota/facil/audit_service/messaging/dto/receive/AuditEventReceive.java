@@ -4,6 +4,7 @@ import java.util.UUID;
 
 public record AuditEventReceive(
         UUID userId,
+        String userEmail,
         String role,
         String actionTitle,
         String actionType,

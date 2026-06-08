@@ -19,8 +19,8 @@ public class AuditService {
         auditRepository.save(entity);
     }
 
-    public List<AuditResponseDTO> list() {
-        return auditRepository.findAll().stream()
+    public List<AuditResponseDTO> list(String actor, String action) {
+        return auditRepository.findAllWithActorAndAction(actor, action).stream()
                 .map(auditMapper::map)
                 .toList();
     }

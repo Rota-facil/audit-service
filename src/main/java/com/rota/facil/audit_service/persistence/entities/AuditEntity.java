@@ -20,6 +20,9 @@ public class AuditEntity {
     @Column(name = "user_id")
     private UUID userId;
 
+    @Column(name = "user_email")
+    private String userEmail;
+
     private String role;
 
     @Column(name = "action_title")
