@@ -5,7 +5,7 @@ import java.util.UUID;
 public record AuditResponseDTO(
         UUID id,
         UUID userId,
-        String userEmail,
+        String email,
         String role,
         String actionTitle,
         String actionType,

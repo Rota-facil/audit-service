@@ -21,7 +21,7 @@ public class AuditEntity {
     private UUID userId;
 
     @Column(name = "user_email")
-    private String userEmail;
+    private String email;
 
     private String role;
 
