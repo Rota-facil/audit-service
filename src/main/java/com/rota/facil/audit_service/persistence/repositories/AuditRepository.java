@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface AuditRepository extends JpaRepository<AuditEntity, UUID> {
     @Query("""
         SELECT a FROM AuditEntity a
-        WHERE (a.userEmail = :actor OR a.userEmail IS NULL)
+        WHERE (a.email = :actor OR a.email IS NULL)
         AND (a.actionType = :action OR a.actionType IS NULL)
     """)
     List<AuditEntity> findAllWithActorAndAction(@Param("actor") String actor, @Param("action") String action);
