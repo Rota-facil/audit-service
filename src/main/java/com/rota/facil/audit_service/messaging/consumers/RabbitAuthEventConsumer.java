@@ -17,6 +17,7 @@ public class RabbitAuthEventConsumer {
             "${rabbitmq.audit.user.created.queue}",
             "${rabbitmq.audit.user.updated.queue}",
             "${rabbitmq.audit.user.deleted.queue}",
+            "${rabbitmq.audit.driver.admin.updated.queue}",
             "${rabbitmq.audit.prefecture.created.queue}",
             "${rabbitmq.audit.prefecture.updated.queue}",
             "${rabbitmq.audit.prefecture.deleted.queue}"

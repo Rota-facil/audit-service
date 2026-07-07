@@ -1,11 +1,16 @@
 package com.rota.facil.audit_service.messaging.dto.receive;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 import java.util.UUID;
 
 public record AuditEventReceive(
         UUID userId,
-        String userEmail,
+        @JsonAlias("email") String userEmail,
         String role,
+        UUID actorUserId,
+        String actorEmail,
+        String actorRole,
         String actionTitle,
         String actionType,
         String resourceName,

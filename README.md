@@ -36,6 +36,7 @@ Exchange `auth.events`:
 
 - `user.created`
 - `user.updated`
+- `driver.admin.updated`
 - `user.deleted`
 - `prefecture.created`
 - `prefecture.updated`

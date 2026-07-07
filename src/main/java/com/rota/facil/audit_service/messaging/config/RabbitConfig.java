@@ -27,6 +27,9 @@ public class RabbitConfig {
     @Value("${rabbitmq.audit.user.deleted.queue}")
     private String userDeletedQueue;
 
+    @Value("${rabbitmq.audit.driver.admin.updated.queue}")
+    private String driverAdminUpdatedQueue;
+
     @Value("${rabbitmq.audit.prefecture.created.queue}")
     private String prefectureCreatedQueue;
 
@@ -35,7 +38,6 @@ public class RabbitConfig {
 
     @Value("${rabbitmq.audit.prefecture.deleted.queue}")
     private String prefectureDeletedQueue;
-
 
     @Value("${rabbitmq.user.created.routing.key}")
     private String userCreatedRoutingKey;
@@ -46,6 +48,9 @@ public class RabbitConfig {
     @Value("${rabbitmq.user.deleted.routing.key}")
     private String userDeletedRoutingKey;
 
+    @Value("${rabbitmq.driver.admin.updated.routing.key}")
+    private String driverAdminUpdatedRoutingKey;
+
     @Value("${rabbitmq.prefecture.created.routing.key}")
     private String prefectureCreatedRoutingKey;
 
@@ -54,8 +59,6 @@ public class RabbitConfig {
 
     @Value("${rabbitmq.prefecture.deleted.routing.key}")
     private String prefectureDeletedRoutingKey;
-
-
 
     @Value("${rabbitmq.file.exchange}")
     private String fileExchange;
@@ -78,8 +81,6 @@ public class RabbitConfig {
     @Value("${rabbitmq.file.deleted.routing.key}")
     private String fileDeletedRoutingKet;
 
-
-
     @Value("${rabbitmq.places.exchange}")
     private String placesExchange;
 
@@ -91,7 +92,6 @@ public class RabbitConfig {
 
     @Value("${rabbitmq.audit.institution.deleted.queue}")
     private String institutionDeletedQueue;
-
 
     @Value("${rabbitmq.audit.boarding.created.queue}")
     private String boardCreatedQueue;
@@ -120,8 +120,6 @@ public class RabbitConfig {
     @Value("${rabbitmq.boarding.deleted.routing.key}")
     private String boardDeletedRoutingKey;
 
-
-
     @Value("${rabbitmq.transport.exchange}")
     private String transportExchange;
 
@@ -140,7 +138,6 @@ public class RabbitConfig {
     @Value("${rabbitmq.audit.trip.cancelled.queue}")
     private String tripCancelledQueue;
 
-
     @Value("${rabbitmq.route.created.routing.key}")
     private String routeCreatedRoutingKey;
 
@@ -155,7 +152,6 @@ public class RabbitConfig {
 
     @Value("${rabbitmq.trip.cancelled.routing.key}")
     private String tripCancelledRoutingKey;
-
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter(ObjectMapper objectMapper) {
@@ -177,12 +173,11 @@ public class RabbitConfig {
             ConnectionFactory connectionFactory,
             Jackson2JsonMessageConverter messageConverter
     ) {
-        SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory = new SimpleRabbitListenerContainerFactory();
-        simpleRabbitListenerContainerFactory.setConnectionFactory(connectionFactory);
-        simpleRabbitListenerContainerFactory.setMessageConverter(messageConverter);
-        return simpleRabbitListenerContainerFactory;
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(messageConverter);
+        return factory;
     }
-
 
     @Bean
     public TopicExchange authExchange() {
@@ -220,6 +215,11 @@ public class RabbitConfig {
     }
 
     @Bean
+    public Queue driverAdminUpdatedQueue() {
+        return new Queue(driverAdminUpdatedQueue);
+    }
+
+    @Bean
     public Queue prefectureCreatedQueue() {
         return new Queue(prefectureCreatedQueue);
     }
@@ -233,7 +233,6 @@ public class RabbitConfig {
     public Queue prefectureDeletedQueue() {
         return new Queue(prefectureDeletedQueue);
     }
-
 
     @Bean
     public Queue fileCreatedQueue() {
@@ -249,7 +248,6 @@ public class RabbitConfig {
     public Queue fileDeletedQueue() {
         return new Queue(fileDeletedQueue);
     }
-
 
     @Bean
     public Queue institutionCreatedQueue() {
@@ -296,7 +294,6 @@ public class RabbitConfig {
         return new Queue(routeDeletedQueue);
     }
 
-
     @Bean
     public Queue tripRunningQueue() {
         return new Queue(tripRunningQueue);
@@ -322,6 +319,10 @@ public class RabbitConfig {
         return BindingBuilder.bind(this.userDeletedQueue()).to(this.authExchange()).with(this.userDeletedRoutingKey);
     }
 
+    @Bean
+    public Binding driverAdminUpdatedBinding() {
+        return BindingBuilder.bind(this.driverAdminUpdatedQueue()).to(this.authExchange()).with(this.driverAdminUpdatedRoutingKey);
+    }
 
     @Bean
     public Binding prefectureCreatedBinding() {
@@ -397,7 +398,6 @@ public class RabbitConfig {
     public Binding routeDeletedBinding() {
         return BindingBuilder.bind(this.routeDeletedQueue()).to(this.transportExchange()).with(this.routeDeletedRoutingKey);
     }
-
 
     @Bean
     public Binding tripRunningBinding() {
