@@ -6,6 +6,7 @@ import java.util.UUID;
 
 public record AuditEventReceive(
         UUID userId,
+        UUID prefectureId,
         @JsonAlias("email") String userEmail,
         String role,
         UUID actorUserId,

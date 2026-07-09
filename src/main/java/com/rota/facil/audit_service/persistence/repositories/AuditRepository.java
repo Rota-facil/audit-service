@@ -13,8 +13,14 @@ import java.util.UUID;
 public interface AuditRepository extends JpaRepository<AuditEntity, UUID> {
     @Query("""
         SELECT a FROM AuditEntity a
-        WHERE (a.email = :actor OR a.email IS NULL)
-        AND (a.actionType = :action OR a.actionType IS NULL)
+        WHERE a.prefectureId = :prefectureId
+        AND (:actor IS NULL OR LOWER(a.email) LIKE LOWER(CONCAT('%', :actor, '%')))
+        AND (:action IS NULL OR a.actionType = :action)
+        ORDER BY a.createdAt DESC
     """)
-    List<AuditEntity> findAllWithActorAndAction(@Param("actor") String actor, @Param("action") String action);
+    List<AuditEntity> findAllByPrefectureWithFilters(
+            @Param("prefectureId") UUID prefectureId,
+            @Param("actor") String actor,
+            @Param("action") String action
+    );
 }

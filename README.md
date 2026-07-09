@@ -1,6 +1,6 @@
 # audit-service
 
-Servico de auditoria do Rota Facil. Ele consome eventos dos demais microservicos, persiste registros de acoes relevantes e disponibiliza consulta filtrada por ator e tipo de acao.
+Servico de auditoria do Rota Facil. Ele consome eventos dos demais microservicos, persiste registros de acoes relevantes e disponibiliza consulta por prefeitura autenticada, ator e tipo de acao.
 
 ## Para que serve
 
@@ -17,7 +17,9 @@ Servico de auditoria do Rota Facil. Ele consome eventos dos demais microservicos
 
 ## Endpoints principais
 
-- `GET /audit`: lista registros de auditoria.
+- `GET /audit`: lista registros de auditoria da prefeitura do usuario autenticado.
+
+A prefeitura e resolvida pelo header `x-prefecture-id` recebido via gateway.
 
 Query params opcionais:
 
@@ -79,6 +81,7 @@ Exchange `transport.events`:
 - Usuario default: `rota-facil`
 - Senha default: `admin`
 - Migrations: `src/main/resources/db/migration`
+- A tabela `audit_tb` possui `prefecture_id` para segregacao por prefeitura e `created_at` para ordenacao.
 
 ## Como rodar
 

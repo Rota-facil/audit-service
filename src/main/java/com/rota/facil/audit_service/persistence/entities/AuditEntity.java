@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -19,6 +21,9 @@ public class AuditEntity {
 
     @Column(name = "user_id")
     private UUID userId;
+
+    @Column(name = "prefecture_id")
+    private UUID prefectureId;
 
     @Column(name = "user_email")
     private String email;
@@ -37,6 +42,10 @@ public class AuditEntity {
     @Column(name = "resource_id")
     private UUID resourceId;
 
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     public AuditEntity() {
     }
 
@@ -50,6 +59,14 @@ public class AuditEntity {
 
     public void setUserId(UUID userId) {
         this.userId = userId;
+    }
+
+    public UUID getPrefectureId() {
+        return prefectureId;
+    }
+
+    public void setPrefectureId(UUID prefectureId) {
+        this.prefectureId = prefectureId;
     }
 
     public String getEmail() {
@@ -98,5 +115,9 @@ public class AuditEntity {
 
     public void setResourceId(UUID resourceId) {
         this.resourceId = resourceId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

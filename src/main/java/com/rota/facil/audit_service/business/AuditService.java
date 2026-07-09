@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +20,17 @@ public class AuditService {
         auditRepository.save(entity);
     }
 
-    public List<AuditResponseDTO> list(String actor, String action) {
-        return auditRepository.findAllWithActorAndAction(actor, action).stream()
+    public List<AuditResponseDTO> list(UUID prefectureId, String actor, String action) {
+        return auditRepository.findAllByPrefectureWithFilters(prefectureId, normalize(actor), normalize(action)).stream()
                 .map(auditMapper::map)
                 .toList();
+    }
+
+    private String normalize(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        return value.trim();
     }
 }
