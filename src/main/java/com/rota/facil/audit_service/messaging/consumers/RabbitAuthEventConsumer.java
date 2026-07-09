@@ -13,16 +13,8 @@ public class RabbitAuthEventConsumer {
     private final AuditService auditService;
     private final AuditEventMapper auditEventMapper;
 
-    @RabbitListener(queues = {
-            "${rabbitmq.audit.user.created.queue}",
-            "${rabbitmq.audit.user.updated.queue}",
-            "${rabbitmq.audit.user.deleted.queue}",
-            "${rabbitmq.audit.driver.admin.updated.queue}",
-            "${rabbitmq.audit.prefecture.created.queue}",
-            "${rabbitmq.audit.prefecture.updated.queue}",
-            "${rabbitmq.audit.prefecture.deleted.queue}"
-    })
-    public void handlerFileEvent(AuditEventReceive auditEventReceive) {
+    @RabbitListener(queues = "${rabbitmq.audit.auth.queue}")
+    public void handlerAuthEvent(AuditEventReceive auditEventReceive) {
         auditService.register(auditEventMapper.map(auditEventReceive));
     }
 }

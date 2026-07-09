@@ -13,11 +13,7 @@ public class RabbitFilesEventConsumer {
     private final AuditService auditService;
     private final AuditEventMapper auditEventMapper;
 
-    @RabbitListener(queues = {
-            "${rabbitmq.audit.file.created.queue}",
-            "${rabbitmq.audit.file.updated.queue}",
-            "${rabbitmq.audit.file.deleted.queue}"
-    })
+    @RabbitListener(queues = "${rabbitmq.audit.file.queue}")
     public void handleFilesEvent(AuditEventReceive auditEventReceive) {
         auditService.register(auditEventMapper.map(auditEventReceive));
     }

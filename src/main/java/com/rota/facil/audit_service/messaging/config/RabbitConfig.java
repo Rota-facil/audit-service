@@ -18,26 +18,26 @@ public class RabbitConfig {
     @Value("${rabbitmq.auth.exchange}")
     private String authExchange;
 
-    @Value("${rabbitmq.audit.user.created.queue}")
-    private String userCreatedQueue;
+    @Value("${rabbitmq.file.exchange}")
+    private String fileExchange;
 
-    @Value("${rabbitmq.audit.user.updated.queue}")
-    private String userUpdatedQueue;
+    @Value("${rabbitmq.places.exchange}")
+    private String placesExchange;
 
-    @Value("${rabbitmq.audit.user.deleted.queue}")
-    private String userDeletedQueue;
+    @Value("${rabbitmq.transport.exchange}")
+    private String transportExchange;
 
-    @Value("${rabbitmq.audit.driver.admin.updated.queue}")
-    private String driverAdminUpdatedQueue;
+    @Value("${rabbitmq.audit.auth.queue}")
+    private String auditAuthQueue;
 
-    @Value("${rabbitmq.audit.prefecture.created.queue}")
-    private String prefectureCreatedQueue;
+    @Value("${rabbitmq.audit.file.queue}")
+    private String auditFileQueue;
 
-    @Value("${rabbitmq.audit.prefecture.updated.queue}")
-    private String prefectureUpdatedQueue;
+    @Value("${rabbitmq.audit.places.queue}")
+    private String auditPlacesQueue;
 
-    @Value("${rabbitmq.audit.prefecture.deleted.queue}")
-    private String prefectureDeletedQueue;
+    @Value("${rabbitmq.audit.transport.queue}")
+    private String auditTransportQueue;
 
     @Value("${rabbitmq.user.created.routing.key}")
     private String userCreatedRoutingKey;
@@ -47,6 +47,18 @@ public class RabbitConfig {
 
     @Value("${rabbitmq.user.deleted.routing.key}")
     private String userDeletedRoutingKey;
+
+    @Value("${rabbitmq.user.email.changed.routing.key}")
+    private String userEmailChangedRoutingKey;
+
+    @Value("${rabbitmq.user.deactivate.routing.key}")
+    private String userDeactivateRoutingKey;
+
+    @Value("${rabbitmq.user.logout.routing.key}")
+    private String userLogoutRoutingKey;
+
+    @Value("${rabbitmq.user.feedback.routing.key}")
+    private String userFeedbackRoutingKey;
 
     @Value("${rabbitmq.driver.admin.updated.routing.key}")
     private String driverAdminUpdatedRoutingKey;
@@ -60,47 +72,14 @@ public class RabbitConfig {
     @Value("${rabbitmq.prefecture.deleted.routing.key}")
     private String prefectureDeletedRoutingKey;
 
-    @Value("${rabbitmq.file.exchange}")
-    private String fileExchange;
-
-    @Value("${rabbitmq.audit.file.created.queue}")
-    private String fileCreatedQueue;
-
-    @Value("${rabbitmq.audit.file.updated.queue}")
-    private String fileUpdatedQueue;
-
-    @Value("${rabbitmq.audit.file.deleted.queue}")
-    private String fileDeletedQueue;
-
     @Value("${rabbitmq.file.created.routing.key}")
-    private String fileCreatedRoutingKet;
+    private String fileCreatedRoutingKey;
 
     @Value("${rabbitmq.file.updated.routing.key}")
-    private String fileUpdatedRoutingKet;
+    private String fileUpdatedRoutingKey;
 
     @Value("${rabbitmq.file.deleted.routing.key}")
-    private String fileDeletedRoutingKet;
-
-    @Value("${rabbitmq.places.exchange}")
-    private String placesExchange;
-
-    @Value("${rabbitmq.audit.institution.created.queue}")
-    private String institutionCreatedQueue;
-
-    @Value("${rabbitmq.audit.institution.updated.queue}")
-    private String institutionUpdatedQueue;
-
-    @Value("${rabbitmq.audit.institution.deleted.queue}")
-    private String institutionDeletedQueue;
-
-    @Value("${rabbitmq.audit.boarding.created.queue}")
-    private String boardCreatedQueue;
-
-    @Value("${rabbitmq.audit.boarding.updated.queue}")
-    private String boardUpdatedQueue;
-
-    @Value("${rabbitmq.audit.boarding.deleted.queue}")
-    private String boardDeletedQueue;
+    private String fileDeletedRoutingKey;
 
     @Value("${rabbitmq.institution.created.routing.key}")
     private String institutionCreatedRoutingKey;
@@ -120,24 +99,6 @@ public class RabbitConfig {
     @Value("${rabbitmq.boarding.deleted.routing.key}")
     private String boardDeletedRoutingKey;
 
-    @Value("${rabbitmq.transport.exchange}")
-    private String transportExchange;
-
-    @Value("${rabbitmq.audit.route.created.queue}")
-    private String routeCreatedQueue;
-
-    @Value("${rabbitmq.audit.route.updated.queue}")
-    private String routeUpdatedQueue;
-
-    @Value("${rabbitmq.audit.route.deleted.queue}")
-    private String routeDeletedQueue;
-
-    @Value("${rabbitmq.audit.trip.running.queue}")
-    private String tripRunningQueue;
-
-    @Value("${rabbitmq.audit.trip.cancelled.queue}")
-    private String tripCancelledQueue;
-
     @Value("${rabbitmq.route.created.routing.key}")
     private String routeCreatedRoutingKey;
 
@@ -153,13 +114,25 @@ public class RabbitConfig {
     @Value("${rabbitmq.trip.cancelled.routing.key}")
     private String tripCancelledRoutingKey;
 
+    @Value("${rabbitmq.trip.deleted.routing.key}")
+    private String tripDeletedRoutingKey;
+
+    @Value("${rabbitmq.bus.created.routing.key}")
+    private String busCreatedRoutingKey;
+
+    @Value("${rabbitmq.bus.updated.routing.key}")
+    private String busUpdatedRoutingKey;
+
+    @Value("${rabbitmq.bus.deleted.routing.key}")
+    private String busDeletedRoutingKey;
+
     @Bean
     public Jackson2JsonMessageConverter messageConverter(ObjectMapper objectMapper) {
         return new Jackson2JsonMessageConverter(objectMapper);
     }
 
     @Bean
-    public RabbitTemplate rabbitListener(
+    public RabbitTemplate rabbitTemplate(
             ConnectionFactory connectionFactory,
             Jackson2JsonMessageConverter messageConverter
     ) {
@@ -200,212 +173,172 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Queue userCreatedQueue() {
-        return new Queue(userCreatedQueue);
+    public Queue auditAuthQueue() {
+        return new Queue(auditAuthQueue);
     }
 
     @Bean
-    public Queue userUpdatedQueue() {
-        return new Queue(userUpdatedQueue);
+    public Queue auditFileQueue() {
+        return new Queue(auditFileQueue);
     }
 
     @Bean
-    public Queue userDeletedQueue() {
-        return new Queue(userDeletedQueue);
+    public Queue auditPlacesQueue() {
+        return new Queue(auditPlacesQueue);
     }
 
     @Bean
-    public Queue driverAdminUpdatedQueue() {
-        return new Queue(driverAdminUpdatedQueue);
+    public Queue auditTransportQueue() {
+        return new Queue(auditTransportQueue);
     }
 
     @Bean
-    public Queue prefectureCreatedQueue() {
-        return new Queue(prefectureCreatedQueue);
+    public Binding userCreatedAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.userCreatedRoutingKey);
     }
 
     @Bean
-    public Queue prefectureUpdatedQueue() {
-        return new Queue(prefectureUpdatedQueue);
+    public Binding userUpdatedAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.userUpdatedRoutingKey);
     }
 
     @Bean
-    public Queue prefectureDeletedQueue() {
-        return new Queue(prefectureDeletedQueue);
+    public Binding userDeletedAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.userDeletedRoutingKey);
     }
 
     @Bean
-    public Queue fileCreatedQueue() {
-        return new Queue(fileCreatedQueue);
+    public Binding userEmailChangedAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.userEmailChangedRoutingKey);
     }
 
     @Bean
-    public Queue fileUpdatedQueue() {
-        return new Queue(fileUpdatedQueue);
+    public Binding userDeactivateAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.userDeactivateRoutingKey);
     }
 
     @Bean
-    public Queue fileDeletedQueue() {
-        return new Queue(fileDeletedQueue);
+    public Binding userLogoutAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.userLogoutRoutingKey);
+    }
+
+
+    @Bean
+    public Binding userFeedbackAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.userFeedbackRoutingKey);
+    }
+
+
+    
+    @Bean
+    public Binding driverAdminUpdatedAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.driverAdminUpdatedRoutingKey);
     }
 
     @Bean
-    public Queue institutionCreatedQueue() {
-        return new Queue(institutionCreatedQueue);
+    public Binding prefectureCreatedAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.prefectureCreatedRoutingKey);
     }
 
     @Bean
-    public Queue institutionUpdatedQueue() {
-        return new Queue(institutionUpdatedQueue);
+    public Binding prefectureUpdatedAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.prefectureUpdatedRoutingKey);
     }
 
     @Bean
-    public Queue institutionDeletedQueue() {
-        return new Queue(institutionDeletedQueue);
+    public Binding prefectureDeletedAuditBinding() {
+        return BindingBuilder.bind(this.auditAuthQueue()).to(this.authExchange()).with(this.prefectureDeletedRoutingKey);
     }
 
     @Bean
-    public Queue boardCreatedQueue() {
-        return new Queue(boardCreatedQueue);
+    public Binding fileCreatedAuditBinding() {
+        return BindingBuilder.bind(this.auditFileQueue()).to(this.filesExchange()).with(this.fileCreatedRoutingKey);
     }
 
     @Bean
-    public Queue boardUpdatedQueue() {
-        return new Queue(boardUpdatedQueue);
+    public Binding fileUpdatedAuditBinding() {
+        return BindingBuilder.bind(this.auditFileQueue()).to(this.filesExchange()).with(this.fileUpdatedRoutingKey);
     }
 
     @Bean
-    public Queue boardDeletedQueue() {
-        return new Queue(boardDeletedQueue);
+    public Binding fileDeletedAuditBinding() {
+        return BindingBuilder.bind(this.auditFileQueue()).to(this.filesExchange()).with(this.fileDeletedRoutingKey);
     }
 
     @Bean
-    public Queue routeCreatedQueue() {
-        return new Queue(routeCreatedQueue);
+    public Binding institutionCreatedAuditBinding() {
+        return BindingBuilder.bind(this.auditPlacesQueue()).to(this.placesExchange()).with(this.institutionCreatedRoutingKey);
     }
 
     @Bean
-    public Queue routeUpdatedQueue() {
-        return new Queue(routeUpdatedQueue);
+    public Binding institutionUpdatedAuditBinding() {
+        return BindingBuilder.bind(this.auditPlacesQueue()).to(this.placesExchange()).with(this.institutionUpdatedRoutingKey);
     }
 
     @Bean
-    public Queue routeDeletedQueue() {
-        return new Queue(routeDeletedQueue);
+    public Binding institutionDeletedAuditBinding() {
+        return BindingBuilder.bind(this.auditPlacesQueue()).to(this.placesExchange()).with(this.institutionDeletedRoutingKey);
     }
 
     @Bean
-    public Queue tripRunningQueue() {
-        return new Queue(tripRunningQueue);
+    public Binding boardCreatedAuditBinding() {
+        return BindingBuilder.bind(this.auditPlacesQueue()).to(this.placesExchange()).with(this.boardCreatedRoutingKey);
     }
 
     @Bean
-    public Queue tripCancelledQueue() {
-        return new Queue(tripCancelledQueue);
+    public Binding boardUpdatedAuditBinding() {
+        return BindingBuilder.bind(this.auditPlacesQueue()).to(this.placesExchange()).with(this.boardUpdatedRoutingKey);
     }
 
     @Bean
-    public Binding userCreatedBinding() {
-        return BindingBuilder.bind(this.userCreatedQueue()).to(this.authExchange()).with(this.userCreatedRoutingKey);
+    public Binding boardDeletedAuditBinding() {
+        return BindingBuilder.bind(this.auditPlacesQueue()).to(this.placesExchange()).with(this.boardDeletedRoutingKey);
     }
 
     @Bean
-    public Binding userUpdatedBinding() {
-        return BindingBuilder.bind(this.userUpdatedQueue()).to(this.authExchange()).with(this.userUpdatedRoutingKey);
+    public Binding routeCreatedAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.routeCreatedRoutingKey);
     }
 
     @Bean
-    public Binding userDeletedBinding() {
-        return BindingBuilder.bind(this.userDeletedQueue()).to(this.authExchange()).with(this.userDeletedRoutingKey);
+    public Binding routeUpdatedAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.routeUpdatedRoutingKey);
     }
 
     @Bean
-    public Binding driverAdminUpdatedBinding() {
-        return BindingBuilder.bind(this.driverAdminUpdatedQueue()).to(this.authExchange()).with(this.driverAdminUpdatedRoutingKey);
+    public Binding routeDeletedAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.routeDeletedRoutingKey);
     }
 
     @Bean
-    public Binding prefectureCreatedBinding() {
-        return BindingBuilder.bind(this.prefectureCreatedQueue()).to(this.authExchange()).with(this.prefectureCreatedRoutingKey);
+    public Binding busCreatedAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.busCreatedRoutingKey);
     }
 
     @Bean
-    public Binding prefectureUpdatedBinding() {
-        return BindingBuilder.bind(this.prefectureUpdatedQueue()).to(this.authExchange()).with(this.prefectureUpdatedRoutingKey);
+    public Binding busUpdatedAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.busUpdatedRoutingKey);
     }
 
     @Bean
-    public Binding prefectureDeletedBinding() {
-        return BindingBuilder.bind(this.prefectureDeletedQueue()).to(this.authExchange()).with(this.prefectureDeletedRoutingKey);
+    public Binding busDeletedAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.busDeletedRoutingKey);
+    }
+
+    
+    @Bean
+    public Binding tripRunningAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.tripRunningRoutingKey);
     }
 
     @Bean
-    public Binding fileCreatedBinding() {
-        return BindingBuilder.bind(this.fileCreatedQueue()).to(this.filesExchange()).with(this.fileCreatedRoutingKet);
+    public Binding tripCancelledAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.tripCancelledRoutingKey);
     }
 
-    @Bean
-    public Binding fileUpdatedBinding() {
-        return BindingBuilder.bind(this.fileUpdatedQueue()).to(this.filesExchange()).with(this.fileUpdatedRoutingKet);
-    }
 
     @Bean
-    public Binding fileDeletedBinding() {
-        return BindingBuilder.bind(this.fileDeletedQueue()).to(this.filesExchange()).with(this.fileDeletedRoutingKet);
-    }
-
-    @Bean
-    public Binding institutionCreatedBinding() {
-        return BindingBuilder.bind(this.institutionCreatedQueue()).to(this.placesExchange()).with(this.institutionCreatedRoutingKey);
-    }
-
-    @Bean
-    public Binding institutionUpdatedBinding() {
-        return BindingBuilder.bind(this.institutionUpdatedQueue()).to(this.placesExchange()).with(this.institutionUpdatedRoutingKey);
-    }
-
-    @Bean
-    public Binding institutionDeletedBinding() {
-        return BindingBuilder.bind(this.institutionDeletedQueue()).to(this.placesExchange()).with(this.institutionDeletedRoutingKey);
-    }
-
-    @Bean
-    public Binding boardCreatedBinding() {
-        return BindingBuilder.bind(this.boardCreatedQueue()).to(this.placesExchange()).with(this.boardCreatedRoutingKey);
-    }
-
-    @Bean
-    public Binding boardUpdatedBinding() {
-        return BindingBuilder.bind(this.boardUpdatedQueue()).to(this.placesExchange()).with(this.boardUpdatedRoutingKey);
-    }
-
-    @Bean
-    public Binding boardDeletedBinding() {
-        return BindingBuilder.bind(this.boardDeletedQueue()).to(this.placesExchange()).with(this.boardDeletedRoutingKey);
-    }
-
-    @Bean
-    public Binding routeCreatedBinding() {
-        return BindingBuilder.bind(this.routeCreatedQueue()).to(this.transportExchange()).with(this.routeCreatedRoutingKey);
-    }
-
-    @Bean
-    public Binding routeUpdatedBinding() {
-        return BindingBuilder.bind(this.routeUpdatedQueue()).to(this.transportExchange()).with(this.routeUpdatedRoutingKey);
-    }
-
-    @Bean
-    public Binding routeDeletedBinding() {
-        return BindingBuilder.bind(this.routeDeletedQueue()).to(this.transportExchange()).with(this.routeDeletedRoutingKey);
-    }
-
-    @Bean
-    public Binding tripRunningBinding() {
-        return BindingBuilder.bind(this.tripRunningQueue()).to(this.transportExchange()).with(this.tripRunningRoutingKey);
-    }
-
-    @Bean
-    public Binding tripCancelledBinding() {
-        return BindingBuilder.bind(this.tripCancelledQueue()).to(this.transportExchange()).with(this.tripCancelledRoutingKey);
+    public Binding tripDeletedAuditBinding() {
+        return BindingBuilder.bind(this.auditTransportQueue()).to(this.transportExchange()).with(this.tripDeletedRoutingKey);
     }
 }

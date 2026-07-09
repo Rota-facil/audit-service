@@ -13,13 +13,7 @@ public class RabbitTransportEventConsumer {
     private final AuditService auditService;
     private final AuditEventMapper auditEventMapper;
 
-    @RabbitListener(queues = {
-            "${rabbitmq.audit.route.created.queue}",
-            "${rabbitmq.audit.route.updated.queue}",
-            "${rabbitmq.audit.route.deleted.queue}",
-            "${rabbitmq.audit.trip.running.queue}",
-            "${rabbitmq.audit.trip.cancelled.queue}"
-    })
+    @RabbitListener(queues = "${rabbitmq.audit.transport.queue}")
     public void handlerTransportEvent(AuditEventReceive auditEventReceive) {
         auditService.register(auditEventMapper.map(auditEventReceive));
     }

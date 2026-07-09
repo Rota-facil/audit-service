@@ -13,14 +13,7 @@ public class RabbitPlacesEventConsumer {
     private final AuditService auditService;
     private final AuditEventMapper auditEventMapper;
 
-    @RabbitListener(queues = {
-            "${rabbitmq.audit.institution.created.queue}",
-            "${rabbitmq.audit.institution.updated.queue}",
-            "${rabbitmq.audit.institution.deleted.queue}",
-            "${rabbitmq.audit.boarding.created.queue}",
-            "${rabbitmq.audit.boarding.updated.queue}",
-            "${rabbitmq.audit.boarding.deleted.queue}"
-    })
+    @RabbitListener(queues = "${rabbitmq.audit.places.queue}")
     public void handlerPlacesEvent(AuditEventReceive auditEventReceive) {
         auditService.register(auditEventMapper.map(auditEventReceive));
     }

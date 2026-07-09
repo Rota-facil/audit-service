@@ -38,6 +38,9 @@ Exchange `auth.events`:
 - `user.updated`
 - `driver.admin.updated`
 - `user.deleted`
+- `user.email.changed`
+- `user.deactivate`
+- `user.logout`
 - `prefecture.created`
 - `prefecture.updated`
 - `prefecture.deleted`
@@ -64,6 +67,11 @@ Exchange `transport.events`:
 - `route.deleted`
 - `trip.running`
 - `trip.cancelled`
+- `trip.deleted`
+- `bus.created`
+- `bus.updated`
+- `bus.deleted`
+- `user.feedback`
 
 ## Banco de dados
 

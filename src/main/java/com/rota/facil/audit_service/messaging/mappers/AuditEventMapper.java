@@ -7,14 +7,14 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface AuditEventMapper {
     default AuditEntity map(AuditEventReceive eventReceive) {
-        return AuditEntity.builder()
-                .userId(eventReceive.actorUserId() != null ? eventReceive.actorUserId() : eventReceive.userId())
-                .email(eventReceive.actorEmail() != null ? eventReceive.actorEmail() : eventReceive.userEmail())
-                .role(eventReceive.actorRole() != null ? eventReceive.actorRole() : eventReceive.role())
-                .actionTitle(eventReceive.actionTitle())
-                .actionType(eventReceive.actionType())
-                .resourceName(eventReceive.resourceName())
-                .resourceId(eventReceive.resourceId())
-                .build();
+        AuditEntity auditEntity = new AuditEntity();
+        auditEntity.setUserId(eventReceive.actorUserId() != null ? eventReceive.actorUserId() : eventReceive.userId());
+        auditEntity.setEmail(eventReceive.actorEmail() != null ? eventReceive.actorEmail() : eventReceive.userEmail());
+        auditEntity.setRole(eventReceive.actorRole() != null ? eventReceive.actorRole() : eventReceive.role());
+        auditEntity.setActionTitle(eventReceive.actionTitle());
+        auditEntity.setActionType(eventReceive.actionType());
+        auditEntity.setResourceName(eventReceive.resourceName());
+        auditEntity.setResourceId(eventReceive.resourceId());
+        return auditEntity;
     }
 }
