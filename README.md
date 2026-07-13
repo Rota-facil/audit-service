@@ -1,104 +1,43 @@
 # audit-service
 
-Servico de auditoria do Rota Facil. Ele consome eventos dos demais microservicos, persiste registros de acoes relevantes e disponibiliza consulta por prefeitura autenticada, ator e tipo de acao.
+Serviço de auditoria do Rota Fácil. Consome eventos dos domínios, normaliza o ator, persiste a trilha por prefeitura e disponibiliza consulta administrativa.
 
-## Para que serve
+## Porta e API
 
-- Registrar acoes de usuarios, prefeituras, arquivos, instituicoes, pontos de embarque, rotas e viagens.
-- Centralizar trilha de auditoria assincrona via RabbitMQ.
-- Expor consulta HTTP para administradores.
-
-## Porta e base path
-
-- Aplicacao: `audit-service`
 - Porta: `8087`
 - Context path: `/audit`
 - Via gateway: `http://localhost:8080/audit`
+- `GET /audit`: lista registros da prefeitura autenticada.
+- Filtros opcionais e combináveis: `actor` e `action`.
+- Infra: `GET /audit/health-check`, `/audit/v3/api-docs`, `/audit/swagger-ui.html`.
 
-## Endpoints principais
+A rota exige `ADMIN` ou `SUPERUSER`. O `prefectureId` vem sempre do usuário autenticado.
 
-- `GET /audit`: lista registros de auditoria da prefeitura do usuario autenticado.
+## Contrato de evento
 
-A prefeitura e resolvida pelo header `x-prefecture-id` recebido via gateway.
-
-Query params opcionais:
-
-- `actor`: email do ator.
-- `action`: tipo de acao.
-
-Infra:
-
-- `GET /audit/health-check`
-- `/audit/v3/api-docs`
-- `/audit/swagger-ui.html`
+O consumidor usa `AuditEventReceive`. Quando `actorUserId`, `actorEmail` e `actorRole` existem, eles são o autor real; caso contrário, o mapper usa `userId`, `userEmail/email` e `role`.
 
 ## Eventos consumidos
 
-Exchange `auth.events`:
+- `auth.events`: `user.created`, `user.updated`, `driver.admin.updated`, `user.deleted`, `user.email.changed`, `user.deactivate`, `user.logout`, `prefecture.created`, `prefecture.updated`, `prefecture.deleted`.
+- `places.events`: CRUD de `institution.*` e `boarding.*`.
+- `transport.events`: CRUD de `route.*` e `bus.*`, `trip.running`, `trip.cancelled`, `trip.deleted` e `user.feedback`.
+- `file.events`: `file.created`, `file.updated`, `file.deleted`.
 
-- `user.created`
-- `user.updated`
-- `driver.admin.updated`
-- `user.deleted`
-- `user.email.changed`
-- `user.deactivate`
-- `user.logout`
-- `prefecture.created`
-- `prefecture.updated`
-- `prefecture.deleted`
+Filas por exchange: `audit.auth.queue`, `audit.places.queue`, `audit.transport.queue` e `audit.file.queue`.
 
-Exchange `file.events`:
+## Persistência
 
-- `file.created`
-- `file.updated`
-- `file.deleted`
-
-Exchange `places.events`:
-
-- `institution.created`
-- `institution.updated`
-- `institution.deleted`
-- `boarding.created`
-- `boarding.updated`
-- `boarding.deleted`
-
-Exchange `transport.events`:
-
-- `route.created`
-- `route.updated`
-- `route.deleted`
-- `trip.running`
-- `trip.cancelled`
-- `trip.deleted`
-- `bus.created`
-- `bus.updated`
-- `bus.deleted`
-- `user.feedback`
-
-## Banco de dados
-
-- Default: `jdbc:postgresql://localhost:5436/audit_database`
-- Usuario default: `rota-facil`
-- Senha default: `admin`
+- Banco: `jdbc:postgresql://localhost:5436/audit_database`
+- Usuário padrão: `rota-facil`
 - Migrations: `src/main/resources/db/migration`
-- A tabela `audit_tb` possui `prefecture_id` para segregacao por prefeitura e `created_at` para ordenacao.
+- Hibernate: `ddl-auto=validate`
 
 ## Como rodar
-
-Pre-requisitos:
-
-- Java 21.
-- PostgreSQL com banco `audit_database`.
-- Eureka.
-- RabbitMQ.
-
-Comando:
 
 ```bash
 cd audit-service
 ./mvnw spring-boot:run
 ```
 
-## Especializacao
-
-Este servico deve ser consumidor e consultor de auditoria. Ele nao deve comandar alteracoes nos dominios; recebe eventos e grava historico.
+Requer Java 21, PostgreSQL, Eureka e RabbitMQ. O serviço registra fatos já ocorridos e não comanda outros domínios.
