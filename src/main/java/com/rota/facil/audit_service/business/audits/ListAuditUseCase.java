@@ -15,7 +15,7 @@ public class ListAuditUseCase {
     private final AuditRepository auditRepository;
     private final AuditMapper auditMapper;
 
-    public List<AuditResponseDTO> list(UUID prefectureId, String actor, String action) {
+    public List<AuditResponseDTO> execute(UUID prefectureId, String actor, String action) {
         return auditRepository.findAllByPrefectureWithFilters(prefectureId, normalize(actor), normalize(action)).stream()
                 .map(auditMapper::map)
                 .toList();
