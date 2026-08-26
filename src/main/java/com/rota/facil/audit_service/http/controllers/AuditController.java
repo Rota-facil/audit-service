@@ -1,6 +1,7 @@
 package com.rota.facil.audit_service.http.controllers;
 
 import com.rota.facil.audit_service.business.AuditService;
+import com.rota.facil.audit_service.business.audits.ListAuditUseCase;
 import com.rota.facil.audit_service.http.dto.request.CurrentUser;
 import com.rota.facil.audit_service.http.dto.response.audit.AuditResponseDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequestMapping
 @RequiredArgsConstructor
 public class AuditController {
-    private final AuditService auditService;
+    private final ListAuditUseCase listAuditUseCase;
 
     @GetMapping
     public ResponseEntity<List<AuditResponseDTO>> listAudit(
@@ -27,6 +28,6 @@ public class AuditController {
             @RequestParam(required = false) String actor,
             @RequestParam(required = false) String action
     ) {
-        return ResponseEntity.ok(auditService.list(currentUser.prefectureId(), actor, action));
+        return ResponseEntity.ok(listAuditUseCase.list(currentUser.prefectureId(), actor, action));
     }
 }

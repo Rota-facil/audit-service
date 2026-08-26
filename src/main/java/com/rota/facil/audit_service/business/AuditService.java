@@ -20,17 +20,4 @@ public class AuditService {
         auditRepository.save(entity);
     }
 
-    public List<AuditResponseDTO> list(UUID prefectureId, String actor, String action) {
-        return auditRepository.findAllByPrefectureWithFilters(prefectureId, normalize(actor), normalize(action)).stream()
-                .map(auditMapper::map)
-                .toList();
-    }
-
-    private String normalize(String value) {
-        if (value == null || value.isBlank()) {
-            return null;
-        }
-
-        return value.trim();
-    }
 }
